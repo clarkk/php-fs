@@ -9,7 +9,8 @@ class Tmp_dir extends Dir {
 	private $is_purged = false;
 	
 	public function create(string $name): string{
-		$this->path = $this->base_path.'/'.date('Y-m-d-His', time() + (new \DateTimeZone('Europe/Copenhagen'))->getOffset(new \DateTime('now'))).'_'.$this->id.'_'.$name;
+		$local_time = time() + (new \DateTimeZone('Europe/Copenhagen'))->getOffset(new \DateTime('now'));
+		$this->path = $this->base_path.'/'.date('Y-m-d-His', $local_time).'_'.$name.'_'.$this->id;
 		
 		if(!is_dir($this->path)){
 			mkdir($this->path);
