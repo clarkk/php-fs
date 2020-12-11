@@ -2,8 +2,6 @@
 
 namespace FS;
 
-require_once 'Dir.php';
-
 class Structure extends Dir {
 	public function create(int $min_digits=2): string{
 		$path 		= $this->base_path.'/';

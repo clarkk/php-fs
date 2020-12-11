@@ -2,8 +2,6 @@
 
 namespace FS;
 
-require_once 'Dir.php';
-
 class Tmp_dir extends Dir {
 	private $path;
 	private $is_purged = false;
