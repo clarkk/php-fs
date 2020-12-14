@@ -21,8 +21,7 @@ class Tmp_dir extends Dir {
 	}
 	
 	public function purge(){
-		shell_exec('rm '.$this->path.'/*');
-		$this->__destruct();
+		shell_exec('rm -r '.$this->path);
 		$this->is_purged = true;
 	}
 	
