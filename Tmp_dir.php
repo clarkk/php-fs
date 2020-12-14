@@ -20,13 +20,25 @@ class Tmp_dir extends Dir {
 		return realpath($this->path);
 	}
 	
-	public function purge(){
-		shell_exec('rm -r '.$this->path);
+	public function purge(bool $delete_recursive=false){
+		if($delete_recursive){
+			shell_exec('rm -r '.$this->path);
+		}
+		else{
+			if($this->is_empty()){
+				rmdir($this->path);
+			}
+		}
+		
 		$this->is_purged = true;
 	}
 	
+	private function is_empty(): bool{
+		return count(scandir($this->path)) <= 2;
+	}
+	
 	public function __destruct(){
-		if($this->auto_purge && !$this->is_purged && count(scandir($this->path)) <= 2){
+		if($this->auto_purge && !$this->is_purged && $this->is_empty()){
 			rmdir($this->path);
 		}
 	}
