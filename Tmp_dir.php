@@ -5,8 +5,11 @@ namespace FS;
 class Tmp_dir extends Dir {
 	private $path;
 	private $is_purged = false;
+	private $auto_purge;
 	
-	public function create(string $name): string{
+	public function create(string $name, bool $auto_purge=true): string{
+		$this->auto_purge = $auto_purge;
+		
 		$local_time = time() + (new \DateTimeZone('Europe/Copenhagen'))->getOffset(new \DateTime('now'));
 		$this->path = $this->base_path.'/'.date('Y-m-d-His', $local_time).'_'.$name.'_'.$this->id;
 		
@@ -24,7 +27,7 @@ class Tmp_dir extends Dir {
 	}
 	
 	public function __destruct(){
-		if(!$this->is_purged && count(scandir($this->path)) <= 2){
+		if($this->auto_purge && !$this->is_purged && count(scandir($this->path)) <= 2){
 			rmdir($this->path);
 		}
 	}
