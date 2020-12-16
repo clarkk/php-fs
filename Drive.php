@@ -62,7 +62,7 @@ class Drive {
 		if($human_readable){
 			$list = [];
 			foreach($this->drives as $dev => $drive){
-				$list[$dev] = $drive[self::SIZE].' ('.$drive[self::USE_PERCENT].' used)';
+				$list[$dev] = $this->human_readable_disk_use($drive);
 			}
 			
 			return $list;
@@ -76,11 +76,15 @@ class Drive {
 		$warnings = [];
 		foreach($this->drives as $dev => $drive){
 			if((int)$drive[self::USE_PERCENT] >= $threshold){
-				$warnings[$dev] = $drive;
+				$warnings[$dev] = $this->human_readable_disk_use($drive);
 			}
 		}
 		
 		return $warnings;
+	}
+	
+	private function human_readable_disk_use(array $drive): string{
+		return $drive[self::SIZE].' ('.$drive[self::USE_PERCENT].' used)';
 	}
 	
 	private function prepare_line(string $line): array{
