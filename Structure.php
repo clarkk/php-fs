@@ -18,7 +18,7 @@ class Structure extends Dir {
 			
 			if(is_dir($path)){
 				if(!is_writable($path)){
-					throw new \Error('Sub-directory is not writeable: '.$path);
+					throw new Error('Sub-directory is not writeable: '.$path);
 				}
 			}
 			else{
