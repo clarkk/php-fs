@@ -49,7 +49,7 @@ class HDD_health extends Drive {
 		
 		if(strpos($Cmd->output(true), $verify_passed) !== false){
 			if($this->verbose){
-				echo "$dev $verify_passed\n";
+				echo "$dev: $verify_passed\n";
 			}
 			
 			$this->disks[$dev] = $verify_passed;
@@ -58,7 +58,7 @@ class HDD_health extends Drive {
 		}
 		
 		if($this->verbose){
-			echo "$dev FAILED health check\n";
+			echo "$dev: FAILED health check\n";
 		}
 		
 		$this->disks[$dev] = 'FAILED';
