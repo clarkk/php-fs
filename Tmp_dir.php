@@ -11,7 +11,7 @@ class Tmp_dir extends Dir {
 		$this->auto_purge = $auto_purge;
 		
 		$local_time = time() + (new \DateTimeZone('Europe/Copenhagen'))->getOffset(new \DateTime('now'));
-		$this->path = $this->base_path.'/'.date('Y-m-d-His', $local_time).'_'.$name.'_'.$this->id;
+		$this->path = $this->base_path.'/'.date('Y-m-d-His', $local_time).'_'.uniqid().'_'.$name.'_'.$this->id;
 		
 		if(!is_dir($this->path)){
 			mkdir($this->path);
