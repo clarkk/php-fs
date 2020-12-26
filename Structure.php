@@ -16,16 +16,20 @@ class Structure extends Dir {
 			
 			$path .= str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT).'/';
 			
-			if(is_dir($path)){
-				if(!is_writable($path)){
-					throw new Error('Sub-directory is not writeable: '.$path);
+			if(!$this->is_url){
+				if(is_dir($path)){
+					if(!is_writable($path)){
+						throw new Error('Sub-directory is not writeable: '.$path);
+					}
 				}
-			}
-			else{
-				mkdir($path);
+				else{
+					mkdir($path);
+				}
 			}
 		}
 		
-		return realpath(rtrim($path, '/'));
+		$path = rtrim($path, '/');
+		
+		return $this->is_url ? $path : realpath($path);
 	}
 }
