@@ -10,8 +10,7 @@ class Tmp_dir extends Dir {
 	public function create(string $name, bool $auto_purge=true): string{
 		$this->auto_purge = $auto_purge;
 		
-		$local_time = time() + (new \DateTimeZone('Europe/Copenhagen'))->getOffset(new \DateTime('now'));
-		$this->path = $this->base_path.'/'.date('Y-m-d-His', $local_time).'_'.uniqid().'_'.$name.'_'.$this->id;
+		$this->path = $this->base_path.'/'.\Time\Time::file_timestamp().'_'.uniqid().'_'.$name.'_'.$this->id;
 		
 		if(!is_dir($this->path)){
 			mkdir($this->path);
