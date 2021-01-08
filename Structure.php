@@ -3,7 +3,7 @@
 namespace FS;
 
 class Structure extends Dir {
-	public function create(int $min_digits=2): string{
+	public function create(int $min_digits=2, string $chown=''): string{
 		$path 		= $this->base_path.'/';
 		$length 	= strlen($this->id);
 		
@@ -24,6 +24,10 @@ class Structure extends Dir {
 				}
 				else{
 					mkdir($path);
+					
+					if($chown){
+						chown($path, $chown);
+					}
 				}
 			}
 		}

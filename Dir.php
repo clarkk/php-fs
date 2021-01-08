@@ -12,7 +12,7 @@ class Dir {
 		$this->id 			= (string)$id;
 		$this->base_path 	= rtrim($base_path, '/');
 		
-		$this->is_url = strpos($this->base_path, '//') === 0;
+		$this->is_url 		= strpos($this->base_path, '//') === 0;
 		
 		//	Do not check if URL
 		if(!$this->is_url){
