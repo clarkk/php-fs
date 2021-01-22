@@ -14,7 +14,9 @@ class Structure extends Dir {
 				break;
 			}
 			
-			$path .= str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT).'/';
+			if($dir = (int)str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT)){
+				$path .= $dir.'/';
+			}
 			
 			if(!$this->is_url){
 				if(is_dir($path)){
