@@ -3,7 +3,15 @@
 namespace FS;
 
 class Structure extends Dir {
+	public function get(int $min_digits=2): string{
+		return $this->path($min_digits);
+	}
+	
 	public function create(int $min_digits=2, string $chown=''): string{
+		return $this->path($min_digits, $chown, true);
+	}
+	
+	private function path(int $min_digits, string $chown='', bool $create=false): string{
 		$path 		= $this->base_path.'/';
 		$length 	= strlen($this->id);
 		
@@ -14,11 +22,14 @@ class Structure extends Dir {
 				break;
 			}
 			
-			if($dir = (int)str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT)){
-				$path .= $dir.'/';
+			//	Continue if digit is 0
+			if(!$dir = (int)str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT)){
+				continue;
 			}
 			
-			if(!$this->is_url){
+			$path .= $dir.'/';
+			
+			if($create && !$this->is_url){
 				if(is_dir($path)){
 					if(!is_writable($path)){
 						throw new Error('Sub-directory is not writeable: '.$path);
@@ -35,6 +46,11 @@ class Structure extends Dir {
 		}
 		
 		$path = rtrim($path, '/');
+		
+		//	Return error if directory path is not found
+		if(!$create && !$this->is_url && !is_dir($path)){
+			throw new Error('Directory is not found: '.$path);
+		}
 		
 		return $this->is_url ? $path : realpath($path);
 	}
