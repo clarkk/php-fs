@@ -4,10 +4,12 @@ namespace FS;
 
 class Purge_dirs {
 	public function purge(string $dir){
-		while($this->is_empty($dir)){
-			rmdir($dir);
-			
-			$dir = dirname($dir);
+		if(is_dir($dir)){
+			while($this->is_empty($dir)){
+				rmdir($dir);
+				
+				$dir = dirname($dir);
+			}
 		}
 	}
 	
