@@ -23,16 +23,16 @@ class Structure extends Dir {
 			}
 			
 			//	Continue if digit is 0
-			if(!$dir = (int)str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT)){
+			if(!$this->id[$i]){
 				continue;
 			}
 			
-			$path .= $dir.'/';
+			$path .= str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT).'/';
 			
 			if($create && !$this->is_url){
 				if(is_dir($path)){
 					if(!is_writable($path)){
-						throw new Error('Sub-directory is not writeable: '.$path);
+						throw new Error('Directory is not writeable: '.$path);
 					}
 				}
 				else{
