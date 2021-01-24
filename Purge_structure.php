@@ -3,13 +3,15 @@
 namespace FS;
 
 class Purge_structure {
-	public function purge(string $dir){
-		if(is_dir($dir)){
-			while($this->is_empty($dir)){
-				rmdir($dir);
-				
-				$dir = dirname($dir);
-			}
+	public function purge(string $path){
+		if(!is_dir($path)){
+			throw new Error('Path is not a directory: '.$path);
+		}
+		
+		while($this->is_empty($path)){
+			rmdir($path);
+			
+			$path = dirname($path);
 		}
 	}
 	
