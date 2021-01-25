@@ -3,6 +3,8 @@
 namespace FS;
 
 class Structure extends Dir {
+	const WWW_USER = 'www-data';
+	
 	public function get(int $min_digits=2): string{
 		return $this->path($min_digits);
 	}
