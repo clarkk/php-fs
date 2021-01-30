@@ -50,7 +50,7 @@ class HDD_health extends Drive {
 		
 		if(!$Cmd->is_success()){
 			if(strpos($output, $health_result) !== false && !$is_passed){
-				$failed_result = $this->get_failed_result($output, $health_result);
+				$failed_result = $this->get_failed_result($dev, $output, $health_result);
 				
 				if($this->verbose){
 					echo "$dev: $failed_result\n";
@@ -74,7 +74,7 @@ class HDD_health extends Drive {
 			return true;
 		}
 		
-		$failed_result = $this->get_failed_result($output, $health_result);
+		$failed_result = $this->get_failed_result($dev, $output, $health_result);
 		
 		if($this->verbose){
 			echo "$dev: $failed_result\n";
@@ -85,9 +85,15 @@ class HDD_health extends Drive {
 		return false;
 	}
 	
-	private function get_failed_result(string $output, string $health_result): string{
+	private function get_failed_result(string $dev, string $output, string $health_result): string{
 		preg_match('/'.$health_result.'.*$/s', $output, $matches);
 		
-		return $matches[0];
+		$result = $matches[0];
+		
+		preg_match('/Serial Number: +(.*)$/m', shell_exec('smartctl -i '.$dev), $matches);
+		
+		$result .= "\nDisk serial number ($dev): ".$matches[1];
+		
+		return $result;
 	}
 }
