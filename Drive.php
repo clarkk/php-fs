@@ -4,7 +4,10 @@ namespace FS;
 
 class Drive {
 	private $drives 	= [];
+	
+	//	Single disk
 	private $sd 		= [];
+	//	Multiple disks (software RAID)
 	private $md 		= [];
 	
 	const SIZE 			= 0;
