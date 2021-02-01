@@ -96,7 +96,7 @@ class HDD_health extends Drive {
 		$health_result_passed 	= $health_result.' PASSED';
 		
 		$Cmd 		= new \Utils\Cmd\Cmd;
-		$err 		= $Cmd->exec('smartctl -H '.$dev);
+		$err 		= $Cmd->exec('/usr/sbin/smartctl -H '.$dev);
 		$output 	= $Cmd->output(true);
 		
 		$is_passed = strpos($output, $health_result_passed) !== false;
@@ -143,7 +143,7 @@ class HDD_health extends Drive {
 		
 		$result = $matches[0];
 		
-		preg_match('/Serial Number: +(.*)$/m', shell_exec('smartctl -i '.$dev), $matches);
+		preg_match('/Serial Number: +(.*)$/m', shell_exec('/usr/sbin/smartctl -i '.$dev), $matches);
 		
 		$result .= "\nDisk serial number ($dev): ".$matches[1];
 		
