@@ -5,8 +5,6 @@ namespace FS;
 class Drive {
 	private $drives 	= [];
 	
-	private $boot 		= [];
-	
 	//	Single disk
 	private $sd 		= [];
 	//	Multiple disks (software RAID)
@@ -23,23 +21,18 @@ class Drive {
 		$headers 	= $this->prepare_line(array_shift($lines));
 		
 		foreach($lines as $line){
-			$line 		= $this->prepare_line($line);
-			$dev 		= array_shift($line);
-			$is_boot 	= strpos($line[4], '/boot') === 0;
+			$line 	= $this->prepare_line($line);
+			$dev 	= array_shift($line);
 			
-			if(strpos($dev, '/dev/sd') === 0){
-				$this->drives[$dev] = $line;
-				
-				if(!$is_boot){
-					$this->sd[$dev] = $line;
+			if(strpos($line[4], '/boot') !== 0){
+				if(strpos($dev, '/dev/sd') === 0){
+					$this->drives[$dev]	= $line;
+					$this->sd[$dev]		= $line;
 				}
-			}
-			
-			if(strpos($dev, '/dev/md') === 0){
-				$this->drives[$dev] = $line;
 				
-				if(!$is_boot){
-					$this->md[$dev] = $line;
+				if(strpos($dev, '/dev/md') === 0){
+					$this->drives[$dev]	= $line;
+					$this->md[$dev]		= $line;
 				}
 			}
 		}
