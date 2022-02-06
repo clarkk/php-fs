@@ -47,7 +47,7 @@ class HDD_health extends Drive {
 		$dev 		= null;
 		$data 		= [];
 		
-		foreach(explode("\n", trim(shell_exec('cat /proc/mdstat'))) as $line){
+		foreach(explode("\n", trim(file_get_contents('/proc/mdstat'))) as $line){
 			if(!$line = trim($line)){
 				if($dev){
 					$partitions[$dev]	= implode("\n", $data);
