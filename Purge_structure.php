@@ -3,7 +3,7 @@
 namespace FS;
 
 class Purge_structure {
-	public function purge(string $path){
+	static public function purge(string $path){
 		if(!is_dir($path)){
 			throw new Error('Path is not a directory: '.$path);
 		}
@@ -15,7 +15,7 @@ class Purge_structure {
 		}
 	}
 	
-	private function is_empty(string $dir): bool{
+	static private function is_empty(string $dir): bool{
 		if(!ctype_digit(basename($dir))){
 			return false;
 		}
