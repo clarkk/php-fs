@@ -3,7 +3,7 @@
 namespace FS;
 
 class File {
-	public function mimetype(string $file, bool $is_stream=false): string{
+	static public function mimetype(string $file, bool $is_stream=false): string{
 		$finfo 	= new \finfo(FILEINFO_MIME);
 		$type 	= $is_stream ? $finfo->buffer($file) : $finfo->file($file);
 		
