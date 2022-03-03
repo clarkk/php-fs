@@ -8,7 +8,7 @@ class Purge_structure {
 			throw new Error('Path is not a directory: '.$path);
 		}
 		
-		while($this->is_empty($path)){
+		while(self::is_empty($path)){
 			rmdir($path);
 			
 			$path = dirname($path);
