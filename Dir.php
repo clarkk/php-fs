@@ -27,11 +27,15 @@ class Dir {
 	}
 	
 	static public function is_empty(string $path): bool{
-		foreach(new \DirectoryIterator($path) as $file){
-			if(!$file->isDot()){
+		$handle = opendir($path);
+		while($entry = readdir($handle)){
+			if($entry != '.' && $entry != '..'){
+				closedir($handle);
+				
 				return false;
 			}
 		}
+		closedir($handle);
 		
 		return true;
 	}
