@@ -1,6 +1,10 @@
 # php-fs
 A small set of tools to handle the file system with file structure, disk drive maintenance etc.
 
+## Classes
+- [\FS\Structure](#fsstructure)
+- [\FS\Tmp_path](#fstmp_path)
+
 ## \FS\Structure
 A good practice to manage data files with relation to an id in a database is **not** to keep too many files in each directory. Searching for files is slowed down in directories with many files. This will structure all files and directories, with no more than 100, 1,000 or 10,000 files in each directory depending on your choice.
 
