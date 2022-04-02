@@ -37,11 +37,10 @@ echo $file_path.'/'.$file_name;
 ```
 The above will generate (without creating each directory) `/var/www/images/4000000/100000/80000/2000/900/4182983.png`;
 
-## \FS\Purge_structure
 ### Purge a file structure path and delete empty directories in the path
 ```
 $file_path = '/var/www/images/4000000/100000/80000/2000';
-\FS\Purge_structure::purge($file_path);
+\FS\Structure::purge($file_path);
 ```
 The above will delete all directories in the structure path `4000000/100000/80000/2000` until a non-empty directory is met
 
