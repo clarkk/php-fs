@@ -26,7 +26,13 @@ class Dir {
 		}
 	}
 	
-	static protected function is_empty(string $path): bool{
-		return count(scandir($path)) <= 2;
+	static public function is_empty(string $path): bool{
+		foreach(new \DirectoryIterator($path) as $file){
+			if(!$file->isDot()){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }
