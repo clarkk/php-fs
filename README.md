@@ -13,7 +13,7 @@ $file_path   = (new \FS\Structure($file_id, $base_path))->create(2);
 
 echo $file_path.'/'.$file_name;
 ```
-The above will generate and create each directory `/var/www/images/4000000/100000/80000/2000/900/4182983.png`;
+The above will generate and create each directory `/var/www/images/4000000/100000/80000/2000/900/4182983.png`
 
 ### Create directory structure with maximum 1,000 files in each directory
 ```
@@ -24,7 +24,7 @@ $file_path   = (new \FS\Structure($file_id, $base_path))->create(3);
 
 echo $file_path.'/'.$file_name;
 ```
-The above will generate and create each directory `/var/www/images/4000000/100000/80000/2000/4182983.png`;
+The above will generate and create each directory `/var/www/images/4000000/100000/80000/2000/4182983.png`
 
 ### Get (without creating) directory structure with maximum 100 files in each directory
 ```
@@ -35,7 +35,7 @@ $file_path   = (new \FS\Structure($file_id, $base_path))->get(2);
 
 echo $file_path.'/'.$file_name;
 ```
-The above will generate (without creating each directory) `/var/www/images/4000000/100000/80000/2000/900/4182983.png`;
+The above will generate (without creating each directory) `/var/www/images/4000000/100000/80000/2000/900/4182983.png`
 
 ### Purge a file structure path and delete empty directories in the path
 ```
