@@ -26,7 +26,7 @@ class Dir {
 		}
 	}
 	
-	static public function is_empty(string $path): bool{
+	static protected function is_empty(string $path): bool{
 		$handle = opendir($path);
 		while($entry = readdir($handle)){
 			if($entry == '.' || $entry == '..'){
