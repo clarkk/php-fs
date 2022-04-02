@@ -29,11 +29,13 @@ class Dir {
 	static public function is_empty(string $path): bool{
 		$handle = opendir($path);
 		while($entry = readdir($handle)){
-			if($entry != '.' && $entry != '..'){
-				closedir($handle);
-				
-				return false;
+			if($entry == '.' || $entry == '..'){
+				continue;
 			}
+			
+			closedir($handle);
+			
+			return false;
 		}
 		closedir($handle);
 		
