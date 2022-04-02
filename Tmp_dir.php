@@ -24,7 +24,7 @@ class Tmp_dir extends Dir {
 			shell_exec('rm -r '.$this->path);
 		}
 		else{
-			if($this->is_empty()){
+			if(self::is_empty($this->path)){
 				rmdir($this->path);
 			}
 		}
@@ -32,12 +32,8 @@ class Tmp_dir extends Dir {
 		$this->is_purged = true;
 	}
 	
-	private function is_empty(): bool{
-		return count(scandir($this->path)) <= 2;
-	}
-	
 	public function __destruct(){
-		if($this->auto_purge && !$this->is_purged && $this->is_empty()){
+		if($this->auto_purge && !$this->is_purged && self::is_empty($this->path)){
 			rmdir($this->path);
 		}
 	}

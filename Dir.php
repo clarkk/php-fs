@@ -25,4 +25,8 @@ class Dir {
 			}
 		}
 	}
+	
+	static protected function is_empty(string $path): bool{
+		return count(scandir($path)) <= 2;
+	}
 }
