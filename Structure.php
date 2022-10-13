@@ -26,7 +26,7 @@ class Structure extends Dir {
 	}
 	
 	private function path(int $min_digits, string $chown='', bool $create=false): string{
-		$path 		= $this->base_path.'/';
+		$path 		= rtrim($this->base_path, '/');
 		$length 	= strlen($this->id);
 		
 		for($i=0; $i<$length; $i++){
@@ -41,7 +41,7 @@ class Structure extends Dir {
 				continue;
 			}
 			
-			$path .= str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT).'/';
+			$path .= '/'.str_pad($this->id[$i], $len, 0, STR_PAD_RIGHT);
 			
 			if($create && !$this->is_url){
 				if(is_dir($path)){
@@ -58,8 +58,6 @@ class Structure extends Dir {
 				}
 			}
 		}
-		
-		$path = rtrim($path, '/');
 		
 		//	Return error if directory path is not found
 		if(!$create && !$this->is_url && !is_dir($path)){
