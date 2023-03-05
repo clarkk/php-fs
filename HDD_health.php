@@ -6,13 +6,48 @@ class HDD_health extends Drive {
 	private $verbose 	= false;
 	private $disks 		= [];
 	
+	const HEALTH_RESULT 		= 'SMART overall-health self-assessment test result:';
+	const HEALTH_RESULT_PASSED 	= self::HEALTH_RESULT.' PASSED';
+	
 	public function __construct(bool $verbose=false){
 		parent::__construct();
 		
 		$this->verbose = $verbose;
 	}
 	
-	public function check_health(): bool{
+	public function diagnostics(int $disk_use_threshold=90): array{
+		$result 	= [];
+		$mail 		= [];
+		
+		$disk_health_passed = $this->check_disk_health();
+		foreach($this->disks as $dev => $disk){
+			$result[] = "$dev: $disk";
+		}
+		
+		foreach($this->get_drives(true) as $dev => $drive){
+			$result[] = "$dev: $drive";
+			
+			if($this->verbose){
+				echo "$dev: $drive\n";
+			}
+		}
+		
+		if($warnings = $this->check_threshold_used($disk_use_threshold)){
+			$host = shell_exec('hostname');
+			$mail = [
+				'Disk usage ('.count($warnings).' warnings) '.$host,
+				"$host\n".implode("\n", $warnings)
+			];
+		}
+		
+		return [
+			'passed'	=> $disk_health_passed,
+			'result'	=> $result,
+			'mail'		=> $mail
+		];
+	}
+	
+	public function check_disk_health(): bool{
 		$failed = false;
 		
 		if($this->get_drive_list()['md']){
@@ -92,24 +127,15 @@ class HDD_health extends Drive {
 	}
 	
 	private function check_disk(string $dev): bool{
-		$health_result 			= 'SMART overall-health self-assessment test result:';
-		$health_result_passed 	= $health_result.' PASSED';
-		
 		$Cmd 		= new \Utils\Cmd\Cmd;
 		$err 		= $Cmd->exec('/usr/sbin/smartctl -H '.$dev);
 		$output 	= $Cmd->output(true);
 		
-		$is_passed = strpos($output, $health_result_passed) !== false;
+		$is_passed = strpos($output, self::HEALTH_RESULT_PASSED) !== false;
 		
 		if(!$Cmd->is_success()){
-			if(!$is_passed && strpos($output, $health_result) !== false){
-				$failed_result = $this->get_failed_result($dev, $output, $health_result);
-				
-				if($this->verbose){
-					echo "$dev: $failed_result\n";
-				}
-				
-				$this->disks[$dev] = $failed_result;
+			if(!$is_passed && strpos($output, self::HEALTH_RESULT) !== false){
+				$this->disk_failed($dev, $output);
 				
 				return false;
 			}
@@ -119,27 +145,31 @@ class HDD_health extends Drive {
 		
 		if($is_passed){
 			if($this->verbose){
-				echo "$dev: $health_result_passed\n";
+				echo "[PASS Disk] $dev: ".self::HEALTH_RESULT_PASSED."\n";
 			}
 			
-			$this->disks[$dev] = $health_result_passed;
+			$this->disks[$dev] = self::HEALTH_RESULT_PASSED;
 			
 			return true;
 		}
 		
-		$failed_result = $this->get_failed_result($dev, $output, $health_result);
-		
-		if($this->verbose){
-			echo "$dev: $failed_result\n";
-		}
-		
-		$this->disks[$dev] = $failed_result;
+		$this->disk_failed($dev, $output);
 		
 		return false;
 	}
 	
-	private function get_failed_result(string $dev, string $output, string $health_result): string{
-		preg_match('/'.$health_result.'.*$/s', $output, $matches);
+	private function disk_failed(string $dev, string $output): void{
+		$failed_result = $this->get_failed_result($dev, $output);
+		
+		if($this->verbose){
+			echo "[FAILURE Disk] $dev: $failed_result\n";
+		}
+		
+		$this->disks[$dev] = $failed_result;
+	}
+	
+	private function get_failed_result(string $dev, string $output): string{
+		preg_match('/'.self::HEALTH_RESULT.'.*$/s', $output, $matches);
 		
 		$result = $matches[0];
 		
