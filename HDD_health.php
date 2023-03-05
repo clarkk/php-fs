@@ -32,7 +32,14 @@ class HDD_health extends Drive {
 			}
 		}
 		
-		if($warnings = $this->check_threshold_used($disk_use_threshold)){
+		if(!$disk_health_passed){
+			$host = shell_exec('hostname');
+			$mail = [
+				'Disk failure '.$host,
+				"$host\n".implode("\n", $this->disks)
+			];
+		}
+		elseif($warnings = $this->check_threshold_used($disk_use_threshold)){
 			$host = shell_exec('hostname');
 			$mail = [
 				'Disk usage ('.count($warnings).' warnings) '.$host,
